@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
@@ -29,10 +29,11 @@ export class ConsultaComponent {
   listaClientes: Cliente[] = [];
 
   constructor(private service: ClienteService) {
-
   }
 
   ngOnInit() {
+    console.log('Passando pelo ngOnInit');
+
     this.listaClientes = this.service.pesquisarClientes('');
   }
 }
