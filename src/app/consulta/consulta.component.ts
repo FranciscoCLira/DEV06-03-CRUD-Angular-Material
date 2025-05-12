@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
@@ -19,7 +20,8 @@ import { Cliente } from '../cadastro/cliente';
     MatInputModule,
     MatIconModule,
     MatTableModule,
-    MatButtonModule
+    MatButtonModule,
+    CommonModule,
   ],
   templateUrl: './consulta.component.html',
   styleUrl: './consulta.component.scss'
@@ -27,6 +29,7 @@ import { Cliente } from '../cadastro/cliente';
 export class ConsultaComponent {
 
   listaClientes: Cliente[] = [];
+  colunasTable: string[] = ['id', 'nome', 'cpf', 'dataNascimento', 'email'];
 
   constructor(private service: ClienteService) {
   }
