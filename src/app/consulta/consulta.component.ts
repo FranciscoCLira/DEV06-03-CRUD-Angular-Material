@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ClienteService } from '../cliente.service';
 import { Cliente } from '../cadastro/cliente';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-consulta',
@@ -27,12 +28,13 @@ import { Router } from '@angular/router';
   templateUrl: './consulta.component.html',
   styleUrl: './consulta.component.scss'
 })
-export class ConsultaComponent {
+export class ConsultaComponent implements OnInit {
 
 
   nomeBusca: string = '';
   listaClientes: Cliente[] = [];
   colunasTable: string[] = ['id', 'nome', 'cpf', 'dataNascimento', 'email', "acoes"];
+  snack: MatSnackBar = inject(MatSnackBar);
 
   constructor(
     private service: ClienteService,
@@ -62,6 +64,6 @@ export class ConsultaComponent {
   deletar(cliente: Cliente){
     this.service.deletar(cliente);
     this.listaClientes = this.service.pesquisarClientes('');
+    this.snack.open('Cliente deletado com scesso', 'OK') 
   }
-
 }

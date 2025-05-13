@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, inject} from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button'; 
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 import { Cliente } from './cliente';
 import { ClienteService } from '../cliente.service';
@@ -34,6 +35,7 @@ export class CadastroComponent implements OnInit {
 
   cliente: Cliente = Cliente.newCliente();
   atualizando: boolean = false;
+  snackbar: MatSnackBar = inject(MatSnackBar);
 
   constructor(
     private service: ClienteService,
@@ -62,11 +64,15 @@ export class CadastroComponent implements OnInit {
     if (!this.atualizando) {
         this.service.salvar(this.cliente);
         this.cliente = Cliente.newCliente();
+        this.mostrarMensagem('Cliente cadastrado com sucesso!')
     } else {
           this.service.atualizar(this.cliente);
           this.router.navigate(['/consulta']);
-          this.atualizando = false;
-          this.cliente = Cliente.newCliente();
+          this.mostrarMensagem('Atualizado com sucesso!')
     }
+  }
+
+  mostrarMensagem(mensagem: string) {
+    this.snackbar.open(mensagem, "OK")
   }
 }
