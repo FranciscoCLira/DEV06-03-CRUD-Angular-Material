@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button'; 
 import {MatSnackBar} from '@angular/material/snack-bar';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { Cliente } from './cliente';
 import { ClienteService } from '../cliente.service';
 import { BrasilapiService } from '../brasilapi.service';
@@ -60,6 +60,10 @@ export class CadastroComponent implements OnInit {
         if(clienteEncontrado){
         this.atualizando = true;
         this.cliente = clienteEncontrado;
+        if(this.cliente.uf){
+          const event = {value: this.cliente.uf} as MatSelectChange;
+          this.carrregarMunicipios(event);
+        }
         }
       }
     })
@@ -75,7 +79,15 @@ export class CadastroComponent implements OnInit {
        error: erro => console.log("Ocorreu um erro:", erro),
     })
 
-    console.log("passou por aqui");
+    // console.log("passou por aqui");
+  }
+
+  carrregarMunicipios(event: MatSelectChange){
+    const ufSelecionada = event.value;
+    this.brasilApiService.listarMunicipios(ufSelecionada).subscribe({
+      next: listaMunicipios => this.municipios = listaMunicipios,
+      error: erro => console.log("Ocorreu um erro:", erro),
+    })  
   }
 
   salvar() {
