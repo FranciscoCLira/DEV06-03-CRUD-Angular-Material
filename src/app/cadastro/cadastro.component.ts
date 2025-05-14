@@ -7,11 +7,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button'; 
 import {MatSnackBar} from '@angular/material/snack-bar';
-
 import { Cliente } from './cliente';
 import { ClienteService } from '../cliente.service';
+import { BrasilapiService } from '../brasilapi.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {NgxMaskDirective, provideNgxMask} from 'ngx-mask';
+import { Estado, Municipio } from '../brasilapi.models';
 
 
 @Component({
@@ -36,15 +37,15 @@ export class CadastroComponent implements OnInit {
   cliente: Cliente = Cliente.newCliente();
   atualizando: boolean = false;
   snackbar: MatSnackBar = inject(MatSnackBar);
+  estados: Estado[] = [];
+  municipios: Municipio[] = [];
 
   constructor(
     private service: ClienteService,
+    private brasilApiService: BrasilapiService,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
-
-  }
-
+  ) {}
   
   ngOnInit(): void {
     this.route.queryParamMap.subscribe( (query: any) => { 
@@ -58,7 +59,20 @@ export class CadastroComponent implements OnInit {
         }
       }
     })
+
+    this.carregarUFs();
   }   
+
+  carregarUFs() {
+    // observable e subscriber   (toda a aplicacao no Angular é assincrona)
+    this.brasilApiService.listarUFs().subscribe({
+       // next: listaEstados => console.log("lista estados", listaEstados),
+       next: listaEstados => this.estados = listaEstados,
+       error: erro => console.log("Ocorreu um erro:", erro),
+    })
+
+    console.log("passou por aqui");
+  }
 
   salvar() {
     if (!this.atualizando) {
